@@ -41,24 +41,6 @@ namespace CsPlugin.Test
         ///     The test resource key.
         /// </summary>
         [Test]
-        public void TestFinger()
-        {
-            var notificaitonManager = new Mock<INotificationManager>();
-            var confManager = new Mock<IConfigurationHelper>();
-            var rest = new Mock<ISonarRestService>();
-            var helper = new Mock<IVsEnvironmentHelper>();
-
-            confManager.Setup(caller => caller.ReadSetting(It.IsAny<Context>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SonarQubeProperties() { Value = nqube });
-
-
-            IAnalysisPlugin plugin = new AnalysisPlugin(notificaitonManager.Object, confManager.Object, rest.Object, helper.Object);
-            Assert.That(plugin.GenerateTokenId(new ConnectionConfiguration()), Is.Not.Null.Or.Empty);
-        }
-
-        /// <summary>
-        ///     The test resource key.
-        /// </summary>
-        [Test]
         public void TestPluginKey()
         {
             var notificaitonManager = new Mock<INotificationManager>();

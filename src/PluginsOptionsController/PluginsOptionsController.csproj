@@ -33,7 +33,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion)">
+    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>True</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FSharp.Data">
       <HintPath>..\..\packages\VSSonarExtensionPlugin$(VSSonarExtensionVersion)\lib\FSharp.Data.dll</HintPath>

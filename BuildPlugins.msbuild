@@ -9,6 +9,7 @@
         <OutVsFolder Condition="'$(VisualStudioVersion)'=='11.0'">vs12</OutVsFolder>
         <OutVsFolder Condition="'$(VisualStudioVersion)'=='12.0'">vs13</OutVsFolder>
         <OutVsFolder Condition="'$(VisualStudioVersion)'=='14.0'">vs15</OutVsFolder>
+        <OutVsFolder Condition="'$(VisualStudioVersion)'=='15.0'">vs17</OutVsFolder>
         <EndVSQFile Condition="'$(EndVSQFile)'==''">AnalysisPlugin.VSQ</EndVSQFile>
         <SkipCopy Condition="'$(SkipCopy)'==''">Yes</SkipCopy>
     </PropertyGroup>    

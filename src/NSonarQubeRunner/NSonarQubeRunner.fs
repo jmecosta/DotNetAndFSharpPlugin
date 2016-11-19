@@ -182,7 +182,6 @@ type NSonarQubeRunner(helper : IConfigurationHelper, notificationManager : INoti
         if resource <> null then
             openSolutionPath <- Path.Combine(resource.SolutionRoot, resource.SolutionName)
             solution <- MSBuildHelper.CreateSolutionData(openSolutionPath)
-            MSBuildHelper.CreateSolutionBuildData(solution)
             Analysers.MSbuildOpenSolution <- Analysers.CurrentWorkspace.OpenSolutionAsync(Path.Combine(resource.SolutionRoot, resource.SolutionName)).Result
             
 

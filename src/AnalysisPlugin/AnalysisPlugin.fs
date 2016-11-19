@@ -62,11 +62,6 @@ type public AnalysisPlugin(notificationManager : INotificationManager, configura
         member this.ResetDefaults() =
             ()
 
-        member this.GenerateTokenId(conf : ISonarConfiguration) = ""
-
-        member this.GetLicenses(configuration : ISonarConfiguration) =
-                new System.Collections.Generic.Dictionary<string, VsLicense>()
-
     interface IRoslynPlugin with
         member this.SetDiagnostics(diagnostics : System.Collections.Generic.List<DiagnosticAnalyzerType>) =
             pluginData.SetDiagnostics(diagnostics)
