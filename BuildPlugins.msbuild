@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+
+	<Import Project="$(MSBuildThisFileDirectory)configuration.props" />
+	
+    <PropertyGroup>
+        <!-- Basic settings -->
+        <VisualStudioVersion Condition="'$(VisualStudioVersion)'==''">11.0</VisualStudioVersion>
+        <OutVsFolder Condition="'$(VisualStudioVersion)'=='11.0'">vs12</OutVsFolder>
+        <OutVsFolder Condition="'$(VisualStudioVersion)'=='12.0'">vs13</OutVsFolder>
+        <OutVsFolder Condition="'$(VisualStudioVersion)'=='14.0'">vs15</OutVsFolder>
+        <EndVSQFile Condition="'$(EndVSQFile)'==''">AnalysisPlugin.VSQ</EndVSQFile>
+        <SkipCopy Condition="'$(SkipCopy)'==''">Yes</SkipCopy>
+    </PropertyGroup>    
+
+    <Target Name="PrintPaths">
+        <Message Text="VSSonarExtensionVersion:     $(VSSonarExtensionVersion)" />
+		<Message Text="TargetFSharpCoreVersion:     $(TargetFSharpCoreVersion)" />
+		<Message Text="VSSonarVersion:              $(VSSonarVersion)" />
+    </Target>
+	
+    <Target Name="BuildPlugins" DependsOnTargets="PrintPaths">
+        <ItemGroup>
+            <Plugins Include="VSonarExtensionPlugins.sln" />
+        </ItemGroup>
+        
+        <RemoveDir Directories="$(MSBuildThisFileDirectory)BuildDrop\$(OutVsFolder)\;$(MSBuildThisFileDirectory)ObjDrop" />
+        <MSBuild Projects="@(Plugins)" Properties="Configuration=Release;VisualStudioVersion=$(VisualStudioVersion)" BuildInParallel="true" StopOnFirstFailure="true" />
+        <Copy Condition="'$(SkipCopy)'!='Yes'" SourceFiles="$(MSBuildThisFileDirectory)BuildDrop/$(OutVsFolder)/AnalysisPlugin.VSQ" DestinationFiles="$(EndVSQFile)"/>
+    </Target>
+    <Target Name="Build" DependsOnTargets="BuildPlugins">
+    </Target>
+    
+</Project>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    
+    <PropertyGroup>
+        <!-- Basic settings -->    
+        <ReferencesFolder        Condition="'$(ReferencesFolder)'==''">$(MSBuildThisFileDirectory)references</ReferencesFolder>
+        <MSBuildFolder           Condition="'$(MSBuildFolder)'==''">$(MSBuildThisFileDirectory)Msbuild</MSBuildFolder>
+               
+        <LegalCopyright        Condition="'$(LegalCopyright)' == ''">Copyright © 2015 jmecsoftware.com</LegalCopyright>
+        <CompanyName           Condition="'$(CompanyName)' == ''">jmecsoftware.com</CompanyName>
+        
+        <!-- Version settings -->
+        <MajorVersionNumber           Condition="'$(MajorVersionNumber)'==''">5</MajorVersionNumber>
+        <MinorVersionNumber           Condition="'$(MinorVersionNumber)'==''">1</MinorVersionNumber>
+        <BuildNumber                  Condition="'$(BuildNumber)'==''">0</BuildNumber>
+        <RevisionNumber               Condition="'$(RevisionNumber)'==''">0</RevisionNumber>
+        <AssemblyPatcherTaskOn        Condition="'$(AssemblyPatcherTaskOn)'==''">false</AssemblyPatcherTaskOn>
+        
+        <VSVersion Condition="'$(VSVersion)'==''">$(VisualStudioVersion)</VSVersion>
+        <TargetFSharpDataVersion>2.2.5.0</TargetFSharpDataVersion>
+        
+        <TargetFSharpCoreVersion Condition="'$(VSVersion)'=='11.0'">4.3.1.0</TargetFSharpCoreVersion>
+        <TargetFSharpCoreVersion Condition="'$(VSVersion)'=='12.0'">4.3.1.0</TargetFSharpCoreVersion>
+        <TargetFSharpCoreVersion Condition="'$(VSVersion)'=='14.0'">4.4.0.0</TargetFSharpCoreVersion>
+        
+        <FSharpFolder Condition="'$(TargetFSharpCoreVersion)'=='4.3.1.0'">FSharp431</FSharpFolder>
+        <FSharpFolder Condition="'$(TargetFSharpCoreVersion)'=='4.3.1.0'">FSharp431</FSharpFolder>
+        <FSharpFolder Condition="'$(TargetFSharpCoreVersion)'=='4.4.0.0'">FSharp440</FSharpFolder>
+        <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+        
+        <OutFolder Condition="'$(VSVersion)'=='11.0'">vs12</OutFolder>
+        <OutFolder Condition="'$(VSVersion)'=='12.0'">vs13</OutFolder>
+        <OutFolder Condition="'$(VSVersion)'=='14.0'">vs15</OutFolder>
+
+        <ExtensionOutputPath     Condition="'$(ExtensionOutputPath)'==''">$(MSBuildThisFileDirectory)BuildDrop\$(OutFolder)\</ExtensionOutputPath>
+        <OBJDir>$(MSBuildThisFileDirectory)ObjDrop\$(OutFolder)\$(Configuration)\$(TSPlatform)</OBJDir>
+        <IntermediateOutputPath>$(OBJDir)$(MSBuildProjectName)\</IntermediateOutputPath>
+		<VSSonarVersion>5.3.0</VSSonarVersion>
+		<VSSonarExtensionVersion>3Api.$(VSSonarVersion)</VSSonarExtensionVersion>
+		<PackagesFolder>$(MSBuildThisFileDirectory)Packages</PackagesFolder>
+    </PropertyGroup>    
+
+    <!-- Basic settings -->
+    <PropertyGroup>
+        <VSSonarExtensionVersion                                     Condition="'$(VSVersion)'=='14.0'">4Api.$(VSSonarVersion)</VSSonarExtensionVersion>
+    </PropertyGroup>
+    
+    </Project>
