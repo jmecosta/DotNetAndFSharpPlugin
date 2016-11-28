@@ -140,7 +140,7 @@ type NSonarQubeRunner(helper : IConfigurationHelper, notificationManager : INoti
         issues
 
         
-    member this.UpdateWorkspace(resource : Resource, externlProfileIn : System.Collections.Generic.Dictionary<string, Profile>, notificationManager : INotificationManager, configuration : ISonarConfiguration) =
+    member this.UpdateWorkspace(resource : Resource, externlProfileIn : System.Collections.Generic.Dictionary<string, Profile>, notificationManager : INotificationManager, configuration : ISonarConfiguration, vsversion:string) =
         profile <- externlProfileIn
 
         // read roslyn plugin properties server
@@ -180,8 +180,9 @@ type NSonarQubeRunner(helper : IConfigurationHelper, notificationManager : INoti
         notificationManager.ReportMessage(new Message(Id = "RoslynRunner", Data = "Checks Enabled " + builder.Length.ToString()))
 
         if resource <> null then
-            openSolutionPath <- Path.Combine(resource.SolutionRoot, resource.SolutionName)
-            solution <- MSBuildHelper.CreateSolutionData(openSolutionPath)
+            openSolutionPath <- Path.Combine(resource.SolutionRoot, resource.SolutionName);
+            let packagesPath = Path.Combine(resource.SolutionRoot, "Packages");
+            solution <- MSBuildHelper.PreProcessSolution("", packagesPath, openSolutionPath, true, false, vsversion);
             Analysers.MSbuildOpenSolution <- Analysers.CurrentWorkspace.OpenSolutionAsync(Path.Combine(resource.SolutionRoot, resource.SolutionName)).Result
             
 

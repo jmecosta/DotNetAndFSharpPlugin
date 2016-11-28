@@ -49,11 +49,11 @@ type public AnalysisPlugin(notificationManager : INotificationManager, configura
         member this.GetPluginDescription() =
             desc
 
-        member this.AssociateProject(resource : Resource, configuration : ISonarConfiguration, profile : System.Collections.Generic.Dictionary<string, Profile>) =
+        member this.AssociateProject(resource : Resource, configuration : ISonarConfiguration, profile : System.Collections.Generic.Dictionary<string, Profile>, vsversion:string) =
             if not(isAssociating) then
                 isAssociating <- true
                 try
-                    pluginData.AssociatePropject(resource, configuration, profile)
+                    pluginData.AssociatePropject(resource, configuration, profile, vsversion)
                 with
                 | ex -> ()
                 isAssociating <- false

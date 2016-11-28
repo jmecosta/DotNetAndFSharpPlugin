@@ -96,7 +96,7 @@ namespace CsPlugin.Test
             profile.AddRule(new Rule { Repo = "roslyn-cs", Key = "SA1200", IsParamsRetrivedFromServer = true, ConfigKey = "roslyn-cs:SA1200" });
             profiledata.Add("cs", profile);
 
-            plugin.AssociateProject(project, conf, profiledata);
+            plugin.AssociateProject(project, conf, profiledata, "14.0");
 
             var vsfile = new VsFileItem();
             var vsproject = new VsProjectItem();
@@ -146,7 +146,7 @@ namespace CsPlugin.Test
             profile.AddRule(new Rule { Repo = "roslyn-cs", Key = "SA1200", IsParamsRetrivedFromServer = true, ConfigKey = "roslyn-cs:SA1200" });
             profiledata.Add("cs", profile);
 
-            plugin.AssociateProject(project, conf, profiledata);
+            plugin.AssociateProject(project, conf, profiledata, "14.0");
 
             var vsfile = new VsFileItem();
             var vsproject = new VsProjectItem();

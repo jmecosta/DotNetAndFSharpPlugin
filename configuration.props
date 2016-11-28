@@ -37,7 +37,7 @@
         <ExtensionOutputPath     Condition="'$(ExtensionOutputPath)'==''">$(MSBuildThisFileDirectory)BuildDrop\$(OutFolder)\</ExtensionOutputPath>
         <OBJDir>$(MSBuildThisFileDirectory)ObjDrop\$(OutFolder)\$(Configuration)\$(TSPlatform)</OBJDir>
         <IntermediateOutputPath>$(OBJDir)$(MSBuildProjectName)\</IntermediateOutputPath>
-		<VSSonarVersion>6.0.0</VSSonarVersion>
+		<VSSonarVersion>6.0.2</VSSonarVersion>
 		<VSSonarExtensionVersion>3Api.$(VSSonarVersion)</VSSonarExtensionVersion>
 		<PackagesFolder>$(MSBuildThisFileDirectory)Packages</PackagesFolder>
     </PropertyGroup>    

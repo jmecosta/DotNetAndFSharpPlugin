@@ -120,7 +120,7 @@ type NQubeRunnerTest() =
         let project = new NSonarQubeRunner(mockHttpReq, mockNotifier, rest, vshelper)
         let resource = new Resource(SolutionRoot = rootProject, SolutionName = "solution.sln")
         project.SetDiagnostics(diagnostics)
-        project.UpdateWorkspace(resource, profile, mockNotifier, conf)
+        project.UpdateWorkspace(resource, profile, mockNotifier, conf, "14.0")
         let item = new VsFileItem(FilePath = Path.Combine(rootProject, "sourcefile.cs"))
         item.Project <- new VsProjectItem()
         item.FilePath <- Path.Combine(rootProject, "sourcefile.cs")
@@ -141,7 +141,7 @@ type NQubeRunnerTest() =
         let project = new NSonarQubeRunner(mockHttpReq, mockNotifier, rest, vshelper)
         let resource = new Resource(SolutionRoot = rootProject, SolutionName = "solution.sln")
         project.SetDiagnostics(diagnostics)
-        project.UpdateWorkspace(resource, profile, mockNotifier, conf)
+        project.UpdateWorkspace(resource, profile, mockNotifier, conf, "14.0")
 
         let item = new VsFileItem(FilePath = Path.Combine(rootProject, "sourcefile.cs"))
         item.Project <- new VsProjectItem()
@@ -169,7 +169,7 @@ type NQubeRunnerTest() =
         let project = new NSonarQubeRunner(mockHttpReq, mockNotifier, rest, vshelper)
         let resource = new Resource(SolutionRoot = rootProject, SolutionName = "solution.sln")
         project.SetDiagnostics(diagnostics)
-        project.UpdateWorkspace(resource, profile, mockNotifier, conf)
+        project.UpdateWorkspace(resource, profile, mockNotifier, conf, "14.0")
         let item = new VsFileItem(FilePath = Path.Combine(rootProject, "Class2.cs"))
         item.Project <- new VsProjectItem()
         item.Project.Solution <- new VsSolutionItem()
@@ -195,7 +195,7 @@ type NQubeRunnerTest() =
 
         let profiles = new System.Collections.Generic.Dictionary<string, Profile>()
         profiles.Add("cs", profileComplete)
-        project.UpdateWorkspace(resource, profiles, mockNotifier, conf)
+        project.UpdateWorkspace(resource, profiles, mockNotifier, conf, "14.0")
         let item = new VsFileItem(FilePath = @"E:\Development\SonarQube\VssonarExtension\VSSonarQubeExtension\VSSonarExtensionUi\ViewModel\Analysis\LocalViewModel.cs")
         item.Project <- new VsProjectItem()
         item.FilePath <- @"E:\Development\SonarQube\VssonarExtension\VSSonarQubeExtension\VSSonarExtensionUi\ViewModel\Analysis\LocalViewModel.cs"

@@ -93,12 +93,12 @@ type LocalExtension(helper : IConfigurationHelper, notificationManager : INotifi
 
     
 
-    member x.AssociatePropject(project : Resource, conf : ISonarConfiguration, externlProfile : System.Collections.Generic.Dictionary<string, Profile>) = 
+    member x.AssociatePropject(project : Resource, conf : ISonarConfiguration, externlProfile : System.Collections.Generic.Dictionary<string, Profile>, vsversion:string) = 
         tries <- 5
 
         let rec update() =
             try
-                nsqanalyser.UpdateWorkspace(project, externlProfile, notificationManager, conf)
+                nsqanalyser.UpdateWorkspace(project, externlProfile, notificationManager, conf, vsversion)
             with
             | ex -> exOu <- ex
                     tries <- tries - 1
