@@ -67,6 +67,9 @@ type public AnalysisPlugin(notificationManager : INotificationManager, configura
             pluginData.SetDiagnostics(diagnostics)
 
     interface IAnalysisPlugin with
+        member this.AdditionalCommands(profile : Dictionary<string,Profile>) = 
+            new List<IPluginCommand>()
+            
         member this.GetLanguageKey(projectItem : VsFileItem) = 
             let extension = Path.GetExtension(projectItem.FileName).ToLower()
 

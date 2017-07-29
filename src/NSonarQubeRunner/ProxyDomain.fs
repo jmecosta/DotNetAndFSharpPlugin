@@ -81,19 +81,19 @@ type ProxyDomain() =
                                         let typeOfField = field.PropertyType
                                         let typeOfFiledName = field.PropertyType.Name
                                         if typeOfFiledName.Equals("IImmutableSet`1") then
-                                            let elems = rule.Params.[0].DefaultValue.Replace("\"", "").Split(',').ToImmutableHashSet()
+                                            let elems = rule.Params.[0].Value.Replace("\"", "").Split(',').ToImmutableHashSet()
                                             field.SetValue(check, elems)
                                         else
-                                            let changedValue = Convert.ChangeType(rule.Params.[0].DefaultValue.Replace("\"", ""), typeOfField)
+                                            let changedValue = Convert.ChangeType(rule.Params.[0].Value.Replace("\"", ""), typeOfField)
                                             field.SetValue(check, changedValue)
 
                                         let value = field.GetValue(check)
-                                        notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue))
-                                        System.Diagnostics.Debug.WriteLine("Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue)
+                                        notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value))
+                                        System.Diagnostics.Debug.WriteLine("Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value)
                                     with
                                     | ex -> 
-                                        System.Diagnostics.Debug.WriteLine("Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue)
-                                        notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Failed Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue))
+                                        System.Diagnostics.Debug.WriteLine("Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value)
+                                        notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Failed Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value))
 
                             ()
             with

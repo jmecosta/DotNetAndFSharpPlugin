@@ -36,7 +36,7 @@ type NQubeRunnerTest() =
         let profiles = new System.Collections.Generic.Dictionary<string, Profile>()
         let profile = new Profile(Mock<ISonarRestService>().Create(), Mock<ISonarConfiguration>().Create())
         let rule = new Rule(ConfigKey = "csharpsquid:S104" )
-        rule.Params.Add(new RuleParam(Key = "maximumFileLocThreshold", DefaultValue = "200" ))
+        rule.Params.Add(new RuleParam(Key = "maximumFileLocThreshold", Value = "200" ))
         profile.AddRule(rule)
         let rule = new Rule(ConfigKey = "csharpsquid:S2333" )
         profile.AddRule(rule)
@@ -55,7 +55,7 @@ type NQubeRunnerTest() =
         let rule = new Rule(ConfigKey = "csharpsquid:S1144" )
         profile.AddRule(rule) 
         let rule = new Rule(ConfigKey = "csharpsquid:S109" )
-        rule.Params.Add(new RuleParam(Key = "exceptions", DefaultValue = "0,1,0x0,0x00,.0,.1,0.0,1.0" ))
+        rule.Params.Add(new RuleParam(Key = "exceptions", Value = "0,1,0x0,0x00,.0,.1,0.0,1.0" ))
         profile.AddRule(rule)
         profiles.Add("cs", profile)
         profiles

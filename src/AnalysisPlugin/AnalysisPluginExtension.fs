@@ -45,7 +45,7 @@ type LocalExtension(helper : IConfigurationHelper, notificationManager : INotifi
     let mutable tries = 5
 
     let triggerException(x, msg : string, ex : Exception) = 
-        let errorInExecution = new LocalAnalysisEventArgs(AnalysisPluginVars.Key, AnalysisPluginVars.Key + msg, ex)
+        let errorInExecution = new LocalAnalysisExceptionEventArgs(AnalysisPluginVars.Key + " " + AnalysisPluginVars.Key + msg, ex)
         completionEvent.Trigger([|x; errorInExecution|])
 
     let GetDoubleParent(x, path : string) =
@@ -77,13 +77,13 @@ type LocalExtension(helper : IConfigurationHelper, notificationManager : INotifi
     member x.ProcessErrorDataReceived(e : DataReceivedEventArgs) =
         if e.Data <> null then
             allOutData <- allOutData @ [e.Data]
-            let message = new LocalAnalysisEventArgs(AnalysisPluginVars.Key, e.Data, null)
+            let message = new LocalAnalysisStdoutMessage(AnalysisPluginVars.Key + " " + e.Data)
             stdErrEvent.Trigger([|x; message|])
 
     member x.ProcessOutputDataReceived(e : DataReceivedEventArgs) =
         if e.Data <> null then
             allOutData <- allOutData @ [e.Data]
-            let message = new LocalAnalysisEventArgs(AnalysisPluginVars.Key, e.Data, null)
+            let message = new LocalAnalysisStdoutMessage(AnalysisPluginVars.Key + " " + e.Data)
             stdOutEvent.Trigger([|x; message|])
 
             if e.Data.EndsWith(".json") then
@@ -152,6 +152,7 @@ type LocalExtension(helper : IConfigurationHelper, notificationManager : INotifi
                 notificationManager.ReportMessage(new Message(Id = "AnalysisPlugin", Data = "Current  issue count [roslyn] : " + issues.Count.ToString() + " : in " + stopWatch.Elapsed.TotalMilliseconds.ToString()))
                 issues.AddRange(stylecopanalyser.RunAnalysis(itemInView, helper))
                 notificationManager.ReportMessage(new Message(Id = "AnalysisPlugin", Data = "Current  issue count [stylecop] : " + issues.Count.ToString() + " : in " + stopWatch.Elapsed.TotalMilliseconds.ToString() ))
+                notificationManager.ReportMessage(new Message(Id = "AnalysisPlugin", Data = "Start [fsharplint] : " + stopWatch.Elapsed.TotalMilliseconds.ToString()))
                 issues.AddRange(fsharpAnalyser.RunLint(itemInView))
                 notificationManager.ReportMessage(new Message(Id = "AnalysisPlugin", Data = "Current  issue count [fsharplint] : " + issues.Count.ToString() + " : in " + stopWatch.Elapsed.TotalMilliseconds.ToString() ))
                 // get available project issues

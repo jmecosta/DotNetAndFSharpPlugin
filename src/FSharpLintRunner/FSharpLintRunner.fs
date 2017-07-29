@@ -6,6 +6,8 @@ open System.Reflection
 open System.Globalization
 open System.Collections
 open System.IO
+open System.Text.RegularExpressions
+open System.Text
 
 
 open VSSonarPlugins.Types
@@ -24,7 +26,7 @@ type FsLintRule(name : string, value : string) =
 type SonarRules() = 
 
     let fsLintProfile = 
-        let resourceManager = new ResourceManager("Text" ,Assembly.Load("FSharpLint.Framework"))
+        let resourceManager = new ResourceManager("Text" ,Assembly.Load("FSharpLint.Core"))
         let set = resourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true)
         let mutable rules = List.Empty
         
@@ -43,20 +45,14 @@ type SonarRules() =
     member this.GetRule(txt : string) =
         
         let VerifyIfExists(rule : FsLintRule, txtdata : string) = 
-            if rule.Text.StartsWith("{") then
-                if rule.Text.Contains("can be refactored") && txt.Contains("can be refactored into") then
-                    true
-                elif rule.Text.Contains("s should be less than") && txt.Contains("s should be less than") then
-                    true
-                else
-                    false
-            else
-                let start = rule.Text.Split('{').[0]
-                if txt.StartsWith(start) then
-                    true
-                else
-                    false
+            let pattern = rule.Text
+                                .Replace("{0}", "[a-zA-Z0-9]{1,}")
+                                .Replace("{1}", "[a-zA-Z0-9]{1,}")
+                                .Replace("{2}", "[a-zA-Z0-9]{1,}")
+                                .Replace("{3}", "[a-zA-Z0-9]{1,}")
+                                .Replace("{4}", "[a-zA-Z0-9]{1,}")
 
+            Regex.Match(txtdata, pattern).Success
 
         let foundItem = fsLintProfile |> Seq.tryFind (fun c -> VerifyIfExists(c, txt))
         match foundItem with
@@ -79,34 +75,41 @@ type FsLintRunner(notificationManager : INotificationManager, configuration : FS
     let mutable issues = List.empty
     let mutable filePath = ""
 
-    let reportLintWarning (warning:FSharpLint.Application.LintWarning.Warning) =
-        let output = warning.Info + System.Environment.NewLine + LintWarning.getWarningWithLocation warning.Range warning.Input
-        let rule = rules.GetRule(warning.Info)
-        if rule <> null then
-            let issue = new Issue(Rule = "fsharplint:" + rule.Rule, Line = warning.Range.StartLine, Component = filePath, Message = warning.Info)
-            issues  <- issues @ [issue]  
-        else
-            notsupportedlines <- notsupportedlines @ [output]
+
             
     let outputLintResult = function
         | LintResult.Success(_) -> notificationManager.ReportMessage(new Message ( Id = "FsLintRunner", Data= "FSharp Link Ok"))
         | LintResult.Failure(error) -> notificationManager.ReportMessage(new Message ( Id = "FsLintRunner", Data= "FSharp Link Error: " + error.ToString()))
 
-    let runLintOnFile pathToFile =
+    let runLintOnFile pathToFile (profile:Profile) =
+        
+            let reportLintWarning (warning:FSharpLint.Application.LintWarning.Warning) =
+                let output = warning.Info + System.Environment.NewLine + LintWarning.getWarningWithLocation warning.Range warning.Input
+                let rule = rules.GetRule(warning.Info)
+                if rule <> null then
+                    let issue = new Issue(Rule = "fsharplint:" + rule.Rule, Line = warning.Range.StartLine, Component = filePath, Message = warning.Info)
+                    let rule = profile.GetRule("fsharplint:" + rule.Rule)
+                    issue.Severity <-rule.Severity
+                    issue.Status <- IssueStatus.OPEN
+                    issues  <- issues @ [issue]  
+                else
+                    notsupportedlines <- notsupportedlines @ [output]
+
             let parseInfo =
                 {
-                    FinishEarly = None
+                    CancellationToken = None
+                    
                     ReceivedWarning = Some reportLintWarning
                     Configuration = Some configuration
                 }
 
             lintFile parseInfo pathToFile
         
-    member this.ExecuteAnalysis(item : VsFileItem) =
+    member this.ExecuteAnalysis(item : VsFileItem, config : Profile) =
         issues <- List.Empty
         filePath <- item.FilePath
         if File.Exists(filePath) then
-            runLintOnFile filePath (Version(4, 0)) |> outputLintResult
+            runLintOnFile filePath config (Version(4, 0)) |> outputLintResult
             notificationManager.ReportMessage(new Message(Id = "FSharpLintRunner", Data = "Issues Found: " + issues.Length.ToString()))
         else
             notificationManager.ReportMessage(new Message(Id = "FSharpLintRunner", Data = "File not found : " + filePath))
@@ -123,7 +126,7 @@ type FSharpLintAnalyser(notificationManager : INotificationManager) =
         if extension.Equals(".fs") ||   extension.Equals(".fsi") then
             try
                 let lintRunner = new FsLintRunner(notificationManager, InputConfigHandler.CreateALintConfiguration(profile))                
-                lintRunner.ExecuteAnalysis(item)
+                lintRunner.ExecuteAnalysis(item, profile.["fs"])
             with
             | ex -> notificationManager.ReportMessage(new Message(Id = "FSharpLintRunner", Data = "Failed to run static analysis: " + ex.Message))
                     notificationManager.ReportException(ex)

@@ -42,19 +42,19 @@ let GetSonarLintDiagnostics(externlProfileIn : System.Collections.Generic.Dictio
                                             let typeOfField = field.PropertyType
                                             let typeOfFiledName = field.PropertyType.Name
                                             if typeOfFiledName.Equals("IImmutableSet`1") then
-                                                let elems = rule.Params.[0].DefaultValue.Replace("\"", "").Split(',').ToImmutableHashSet()
+                                                let elems = rule.Params.[0].Value.Replace("\"", "").Split(',').ToImmutableHashSet()
                                                 field.SetValue(check.Diagnostic, elems)
                                             else
-                                                let changedValue = Convert.ChangeType(rule.Params.[0].DefaultValue.Replace("\"", ""), typeOfField)
+                                                let changedValue = Convert.ChangeType(rule.Params.[0].Value.Replace("\"", ""), typeOfField)
                                                 field.SetValue(check.Diagnostic, changedValue)
 
                                             let value = field.GetValue(check.Diagnostic)
-                                            notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue))
-                                            System.Diagnostics.Debug.WriteLine("Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue)
+                                            notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value))
+                                            System.Diagnostics.Debug.WriteLine("Applied Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value)
                                         with
                                         | ex -> 
-                                            notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Rule parameter was not applied csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue))
-                                            System.Diagnostics.Debug.WriteLine("Failed to apply Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].DefaultValue)
+                                            notificationManager.ReportMessage(new Message(Id = "NSonarQubeRunner", Data = "Rule parameter was not applied csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value))
+                                            System.Diagnostics.Debug.WriteLine("Failed to apply Rule Parameter csharpsquid:" + diagnostic.Id + " = " + rule.Params.[0].Value)
                                 ()
                         with
                         | ex -> System.Diagnostics.Debug.WriteLine("Cannot Add Check Failed: " + check.ToString() + " : " +  ex.Message)

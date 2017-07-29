@@ -111,7 +111,7 @@
       <HintPath>..\..\References\StyleCop.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections.Immutable">
-      <HintPath>..\..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <HintPath>..\..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data" />
@@ -121,8 +121,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Reflection.Metadata">
-      <HintPath>..\..\packages\System.Reflection.Metadata.1.1.0\lib\dotnet5.2\System.Reflection.Metadata.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="System.Text.Encoding" />
     <Reference Include="System.Threading.Tasks" />
