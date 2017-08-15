@@ -206,15 +206,23 @@ let runAnalyserWithMSBuild(itemInView : VsFileItem,
                 let mutable idsbd = List.Empty
 
                 for datam in buildertypes do
+                    let findType(c:DiagnosticAnalyzer) = 
+                        let name1 = c.GetType().FullName
+                        let name2 = datam.Diagnostic.GetType().FullName
+                        name1.Equals(name2)
+
                     let isdefinedforlang = datam.Languages |> Seq.tryFind( fun c -> c.Equals(fileLang))
                     match isdefinedforlang with
                     | Some lang -> 
-                            bd <- bd @ [datam.Diagnostic]
+                            let found = bd |> Seq.tryFind( fun c -> findType(c))
+
+                            if found.IsNone then
+                                bd <- bd @ [datam.Diagnostic]
+
                             idsbd <- idsbd @ [ids.[count]]
                     | _ -> ()
 
                     count <- count + 1
-
                 bd, idsbd
 
             let syntaxDiag, semanticDiag = runRoslynOnCompilationUnitTree(compilation, ids.ToImmutableDictionary(), builder, additionalFiles, token, itemInView)
